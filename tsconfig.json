@@ -1,0 +1,28 @@
+{
+  "spec": "./src/__tests__/**/*.ts",
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "commonjs",
+    "lib": ["es2017", "esnext.asynciterable", "dom"],
+    "sourceMap": true,
+    "outDir": "./dist",
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["src/*"],
+      "@models/*": ["src/models/*"],
+      "@modules/*": ["src/modules/*"],
+      "@shared/*": ["src/shared/*"]
+    },
+    "typeRoots": ["node_modules/@types", "./typings"],
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "exclude": ["node_modules", "src/**/*.spec.ts"],
+  "include": ["typings/**/*.d.ts", "src/**/*"]
+}
