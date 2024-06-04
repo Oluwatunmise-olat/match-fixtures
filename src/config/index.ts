@@ -12,17 +12,17 @@ export const appConfig = {
 	port: Number(process.env.PORT) || 34003,
 	app_name: process.env.APP_NAME || 'match-fixtures',
 	version: process.env.APP_VERSION || 'v1',
-	app_key: process.env.APP_KEY,
+	app_key: process.env.APP_KEY || '',
 	app_base_url: process.env.APP_BASE_URL || '',
 	tooling_key: process.env.TOOLING_KEY || '',
-	env: process.env.NODE_ENV,
+	env: process.env.NODE_ENV || 'development',
 }
 
 export const redisConfig = {
 	host: process.env.REDIS_HOST,
 	port: Number(process.env.REDIS_PORT),
 	username: process.env.REDIS_USERNAME || 'default',
-	password: process.env.REDIS_PASSWORD,
+	password: process.env.REDIS_PASSWORD || '',
 }
 
 /**

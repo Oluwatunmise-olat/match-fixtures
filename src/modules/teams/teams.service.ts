@@ -23,7 +23,6 @@ export class TeamsService {
 
 			return { status: true, message: 'Team created successfully' }
 		} catch (error) {
-			console.log(error)
 			return { status: false, message: 'An error occurred creating team' }
 		}
 	}
@@ -43,8 +42,6 @@ export class TeamsService {
 
 	public async getTeamDetails(teamId: string): Promise<ServiceLayerResponse> {
 		try {
-			console.log(teamId)
-
 			const team = await this.teamRepository.findOne({ _id: teamId, deleted_at: null })
 			if (!team) return { status: false, message: 'Team not found', errorStatusCode: StatusCodes.NOT_FOUND }
 
@@ -72,7 +69,7 @@ export class TeamsService {
 
 			return { status: true, message: 'Team details fetched successfully' }
 		} catch (error) {
-			return { status: false, message: 'An error occurred fetching team details' }
+			return { status: false, message: 'An error occurred updating team details' }
 		}
 	}
 

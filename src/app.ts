@@ -3,6 +3,7 @@ import cors from 'cors'
 import express from 'express'
 import 'reflect-metadata'
 import { container, injectable } from 'tsyringe'
+import http from 'http'
 
 import bootUp from './bootup'
 import rateLimitMiddleware from './shared/middlewares/rate-limit.middleware'
@@ -14,6 +15,7 @@ import { RedisClient } from './shared/utils/redis.utils'
 @injectable()
 class App {
 	public server: Server
+	private httpServer: http.Server
 
 	constructor() {
 		bootUp()
@@ -39,10 +41,11 @@ class App {
 
 	public async close() {
 		container.resolve(RedisClient).disconnect()
+		this.httpServer.close()
 	}
 
 	public async listen(port: number) {
-		await this.server.listen(port)
+		this.httpServer = await this.server.listen(port)
 	}
 }
 

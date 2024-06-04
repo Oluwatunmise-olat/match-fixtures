@@ -13,7 +13,7 @@ const env = {
 	},
 	redis: { port: 6379, host: 'localhost' },
 	app: {
-		tooling_key: faker.random.alphaNumeric(18),
+		tooling_key: 'tooling_secret_key',
 		key: faker.random.alphaNumeric(12),
 		port: 3202,
 	},
@@ -67,15 +67,15 @@ const writeTestEnvToFile = () => {
 	fs.writeFileSync(
 		EnvFilePath,
 		`
-			MONGO_URI: mongodb://${env.mongodb.host}:${env.mongodb.password}@${env.mongodb.host}:${mongodbContainer?.getMappedPort(
-			env.mongodb.port,
-		)}
+			MONGO_URI = mongodb://${env.mongodb.username}:${
+			env.mongodb.password
+		}@${mongodbContainer?.getContainerIpAddress()}:${mongodbContainer?.getMappedPort(env.mongodb.port)}
 			REDIS_HOST = ${env.redis.host}
 			REDIS_PORT = ${redisContainer!.getMappedPort(env.redis.port)}	  
 			TOOLING_KEY = ${env.app.tooling_key}
 			PORT = ${env.app.port}
 			APP_BASE_URL = 0.0.0.0:${env.app.port}
-			APP_KEY: ${env.app.key}
+			APP_KEY = ${env.app.key}
 			`,
 	)
 }

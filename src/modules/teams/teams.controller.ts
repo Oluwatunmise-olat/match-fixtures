@@ -46,5 +46,3 @@ export class TeamsController {
 		return baseResponse({ response, data })
 	}
 }
-
-// - TODO :: Caching
