@@ -2,7 +2,7 @@ import type { RedisClientType } from 'redis'
 import * as redis from 'redis'
 import { singleton } from 'tsyringe'
 
-import { redisConfig } from '@config/index'
+import { appConfig, redisConfig } from '@config/index'
 import { NodeEnvironments } from '../enums/models.enum'
 
 @singleton()
@@ -35,7 +35,7 @@ export class RedisClient {
 	private getEnvConnectionDetails() {
 		let payload = {}
 
-		if ([NodeEnvironments.DEVELOPMENT, NodeEnvironments.TEST]) {
+		if ([NodeEnvironments.DEVELOPMENT, NodeEnvironments.TEST].includes(appConfig.env as NodeEnvironments)) {
 			payload = {
 				socket: { host: redisConfig.host, port: redisConfig.port },
 				password: redisConfig.password ?? '',
