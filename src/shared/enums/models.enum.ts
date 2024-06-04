@@ -15,3 +15,10 @@ export enum FixtureStatus {
 	ONGOING = 'ongoing',
 	COMPLETED = 'completed',
 }
+
+export enum NodeEnvironments {
+	PRODUCTION = 'production',
+	DEVELOPMENT = 'development',
+	STAGING = 'staging',
+	TEST = 'test',
+}

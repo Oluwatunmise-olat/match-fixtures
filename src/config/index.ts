@@ -23,6 +23,7 @@ export const redisConfig = {
 	port: Number(process.env.REDIS_PORT),
 	username: process.env.REDIS_USERNAME || 'default',
 	password: process.env.REDIS_PASSWORD || '',
+	url: process.env.REDIS_URL || '',
 }
 
 /**
