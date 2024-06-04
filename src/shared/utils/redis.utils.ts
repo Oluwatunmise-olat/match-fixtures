@@ -12,6 +12,7 @@ export class RedisClient {
 		this.instance = redis.createClient({
 			socket: { host: redisConfig.host, port: redisConfig.port },
 			password: redisConfig.password ?? '',
+			username: redisConfig.username,
 		})
 
 		this.instance.connect()
