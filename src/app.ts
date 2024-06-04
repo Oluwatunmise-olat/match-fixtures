@@ -1,45 +1,49 @@
-import bodyParser from "body-parser";
-import cors from "cors";
-import "reflect-metadata";
-import express from "express";
-import { container, injectable } from "tsyringe";
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import express from 'express'
+import 'reflect-metadata'
+import { container, injectable } from 'tsyringe'
 
-import bootUp from "./bootup";
-import { Server } from "./shared/types/http.type";
-import { RedisClient } from "./shared/utils/redis.utils";
-import applicationRoutes from "./shared/routes/index.routes";
+import bootUp from './bootup'
+import rateLimitMiddleware from './shared/middlewares/rate-limit.middleware'
+import applicationRoutes from './shared/routes/index.routes'
+import { Server } from './shared/types/http.type'
+import { errorHandler, notFoundRoute } from './shared/utils/http.utils'
+import { RedisClient } from './shared/utils/redis.utils'
 
 @injectable()
 class App {
-  public server: Server;
+	public server: Server
 
-  constructor() {
-    bootUp();
-    this.initializeApp();
-    this.initializeAppMiddlewares();
-  }
+	constructor() {
+		bootUp()
+		this.initializeApp()
+		this.initializeAppMiddlewares()
+	}
 
-  private initializeApp() {
-    this.server = express();
-    container.resolve(RedisClient);
-  }
+	private initializeApp() {
+		this.server = express()
+		container.resolve(RedisClient)
+	}
 
-  private initializeAppMiddlewares() {
-    this.server.use(cors({ origin: "*" }));
-    this.server.use(bodyParser.json({ limit: "10mb" }));
-    this.server.use(bodyParser.urlencoded({ limit: "10mb", extended: false }));
-    // this.server.use(loggerMiddleware)
+	private initializeAppMiddlewares() {
+		this.server.use(cors({ origin: '*' }))
+		this.server.use(bodyParser.json({ limit: '10mb' }))
+		this.server.use(bodyParser.urlencoded({ limit: '10mb', extended: false }))
+		this.server.use(rateLimitMiddleware({ maxRequests: 100, window: '1m' }))
 
-    applicationRoutes(this.server);
-  }
+		applicationRoutes(this.server)
+		this.server.use(notFoundRoute)
+		this.server.use(errorHandler)
+	}
 
-  public async close() {
-    container.resolve(RedisClient).disconnect();
-  }
+	public async close() {
+		container.resolve(RedisClient).disconnect()
+	}
 
-  public async listen(port: number) {
-    await this.server.listen(port);
-  }
+	public async listen(port: number) {
+		await this.server.listen(port)
+	}
 }
 
-export default App;
+export default App

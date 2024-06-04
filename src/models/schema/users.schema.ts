@@ -2,6 +2,7 @@ import { SchemaDefinition } from "mongoose";
 import { singleton } from "tsyringe";
 
 import BaseSchema from "./base.schema";
+import { UserRoles } from "@app/shared/enums/models.enum";
 
 @singleton()
 export default class UserSchema extends BaseSchema {
@@ -17,6 +18,11 @@ export default class UserSchema extends BaseSchema {
       username: { type: String, required: true },
       email: { type: String, required: true, unique: true },
       password: { type: String, required: true },
+      role: {
+        type: String,
+        enum: Object.values(UserRoles),
+        default: UserRoles.NORMAL,
+      },
     };
   }
 }
