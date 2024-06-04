@@ -1,4 +1,5 @@
 import { injectable } from 'tsyringe'
+import { StatusCodes } from 'http-status-codes'
 
 import { UserRepository } from '@app/repositories'
 
@@ -37,7 +38,8 @@ export class AuthService {
 
 			const credentialValidationResult = await this.validateUserCredentials(email, payload.password)
 
-			if (!credentialValidationResult.status) return { status: false, message: credentialValidationResult.message }
+			if (!credentialValidationResult.status)
+				return { status: false, message: credentialValidationResult.message, errorStatusCode: StatusCodes.UNAUTHORIZED }
 
 			const { user } = credentialValidationResult.data!
 
@@ -58,12 +60,12 @@ export class AuthService {
 	private async validateUserCredentials(email: string, password: string) {
 		const baseErrMessage = 'Invalid Credentials'
 
-		const user = await this.userRepository.getUserByEmail(email)
+		const user = await this.userRepository.getUserByEmail(email, { password: true, _id: true, role: true })
 		if (!user) return { status: false, message: baseErrMessage }
 
 		const isValidPassword = await comparePlainAndHashText(user.password, password)
 
-		if (isValidPassword) return { status: false, message: baseErrMessage }
+		if (!isValidPassword) return { status: false, message: baseErrMessage }
 
 		return { status: true, message: 'Valid Credentials', data: { user } }
 	}

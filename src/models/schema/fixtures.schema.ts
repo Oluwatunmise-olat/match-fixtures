@@ -11,6 +11,7 @@ export default class FixturesSchema extends BaseSchema {
 
 		const modelDefinitions = this.getPropertiesDefinition()
 		this.schema.add(modelDefinitions)
+		this.schema.index({ stadium: -1, home_team_id: -1, away_team_id: -1 })
 	}
 
 	private getPropertiesDefinition(): SchemaDefinition {

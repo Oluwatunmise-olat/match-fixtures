@@ -1,6 +1,5 @@
 export type PlayersDto = {
 	name: string
-	number: number
 	position: string
 }
 

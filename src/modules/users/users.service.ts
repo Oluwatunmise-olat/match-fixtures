@@ -16,8 +16,6 @@ export class UserService {
 			const user = await this.userRepository.findOne({ _id: userId, deleted_at: null })
 			if (!user) return { status: false, message: 'User not found', errorStatusCode: StatusCodes.NOT_FOUND }
 
-			delete user.password
-
 			return { status: true, message: 'User details fetched successfully', data: user }
 		} catch (error) {
 			return { status: false, message: 'An error occurred fetching user details' }

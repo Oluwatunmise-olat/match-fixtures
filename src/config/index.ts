@@ -15,6 +15,7 @@ export const appConfig = {
 	app_key: process.env.APP_KEY,
 	app_base_url: process.env.APP_BASE_URL || '',
 	tooling_key: process.env.TOOLING_KEY || '',
+	env: process.env.NODE_ENV,
 }
 
 export const redisConfig = {
@@ -32,7 +33,7 @@ export default () => {
 	const nullEnvKeys = requiredEnvsOnAppBoot.reduce((accNullEnvs, currEnv) => {
 		const currEnvSet = process.env[currEnv.toUpperCase()]
 
-		return currEnvSet ? accNullEnvs : [...accNullEnvs, currEnv]
+		return currEnvSet ? accNullEnvs : [...accNullEnvs, currEnv.toUpperCase()]
 	}, [])
 
 	if (nullEnvKeys.length) throw new Error(`The following required env variables are missing: ${nullEnvKeys}}`)

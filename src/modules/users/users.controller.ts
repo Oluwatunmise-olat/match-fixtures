@@ -9,14 +9,14 @@ export class UserController {
 	constructor(private readonly userService: UserService) {}
 
 	getUser = async (request: Request, response: Response) => {
-		const { userId } = request.query
+		const { userId } = request.params
 		const data = await this.userService.getUser(userId as string)
 
 		return baseResponse({ response, data })
 	}
 
 	getAllUsers = async (request: Request, response: Response) => {
-		const qs = request.params
+		const qs = request.query
 		const data = await this.userService.getAllUsers(qs)
 
 		return baseResponse({ response, data })

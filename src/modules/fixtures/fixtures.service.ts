@@ -9,9 +9,12 @@ import { ObjectLiteral, ServiceLayerResponse } from '@app/shared/types/base.type
 import { CreateFixtureDto } from '@app/shared/types/dtos/fixture.dto'
 import { FixtureQs } from '@app/shared/types/dtos/qs.dto'
 import { setPaginationLimit } from '@app/shared/utils/pagination'
+import { formatDate } from '@app/shared/utils/date'
 
 @injectable()
 export class FixturesService {
+	private readonly dateFormat = 'YYYY-MM-DD HH:mm:ss'
+
 	constructor(
 		private readonly teamsRepository: TeamsRepository,
 		private readonly fixturesRepository: FixturesRepository,
@@ -19,11 +22,15 @@ export class FixturesService {
 
 	public async createFixture(payload: CreateFixtureDto): Promise<ServiceLayerResponse> {
 		try {
+			if (payload.away_team_id === payload.home_team_id)
+				return { status: false, message: 'Home and away teams cannot be same' }
+
 			const teamValidationPayload = { away_team_id: payload.away_team_id, home_team_id: payload.home_team_id }
 
 			const isValidTeam = await this.validTeams(teamValidationPayload)
 			if (!isValidTeam) return { status: false, message: 'Invalid Team Id', errorStatusCode: StatusCodes.NOT_FOUND }
 
+			payload.kickoff_at = formatDate(payload.kickoff_at, this.dateFormat)
 			await this.fixturesRepository.create(payload)
 
 			return { status: true, message: 'Fixture created' }
@@ -52,9 +59,9 @@ export class FixturesService {
 			const fixture = await this.fixturesRepository.findOne({ _id: fixture_id, deleted_at: null })
 			if (!fixture) return { status: false, message: 'Invalid fixture Id', errorStatusCode: StatusCodes.NOT_FOUND }
 
-			return { status: true, message: 'Fixture Link Generated', data: { fixture } }
+			return { status: true, message: 'Fixture details fetched successfully', data: { fixture } }
 		} catch (error) {
-			return { status: false, message: 'An error occurred generating fixture link' }
+			return { status: false, message: 'An error occurred fetching fixture details' }
 		}
 	}
 
@@ -64,7 +71,7 @@ export class FixturesService {
 
 			const fixtures = await this.fixturesRepository.getAllFixtures(qs)
 
-			return { status: true, message: 'Fixture Link Generated', data: { fixtures } }
+			return { status: true, message: 'Fixtures fetched successfully', data: { fixtures } }
 		} catch (error) {
 			return { status: false, message: 'An error occurred fetching all fixtures' }
 		}
@@ -94,6 +101,7 @@ export class FixturesService {
 			const fixture = await this.fixturesRepository.findOne({ _id: fixture_id, deleted_at: null })
 			if (!fixture) return { status: false, message: 'Invalid fixture Id', errorStatusCode: StatusCodes.NOT_FOUND }
 
+			payload.kickoff_at = formatDate(payload.kickoff_at, this.dateFormat)
 			await this.fixturesRepository.updateById(fixture_id, payload)
 
 			return { status: true, message: 'Fixture updated successfully' }

@@ -4,6 +4,7 @@ import { injectable } from 'tsyringe'
 import BaseRepository from './base.repository'
 import fixturesModel from '@app/models/fixtures.model'
 import { ObjectLiteral } from '@app/shared/types/base.type'
+import { formatDate } from '@app/shared/utils/date'
 
 @injectable()
 export class FixturesRepository extends BaseRepository<any> {
@@ -12,7 +13,8 @@ export class FixturesRepository extends BaseRepository<any> {
 	}
 
 	public async getAllFixtures({ team_id, stadium, status, start_date, end_date, limit = 10, page = 1 }: ObjectLiteral) {
-		const queryPayload = {}
+		const queryPayload = { deleted_at: null }
+		const dateFormats = 'YYYY-MM-DD HH:mm:ss'
 
 		if (team_id) {
 			const teamId = new mongoose.Types.ObjectId(team_id)
@@ -20,11 +22,14 @@ export class FixturesRepository extends BaseRepository<any> {
 		}
 
 		if (start_date && end_date) {
+			start_date = formatDate(start_date, dateFormats)
+			end_date = formatDate(end_date, dateFormats)
+
 			queryPayload['kickoff_at'] = { $gte: start_date, $lt: end_date }
 		}
 
 		if (stadium) {
-			queryPayload['stadium'] = stadium
+			queryPayload['stadium'] = { $regex: new RegExp(stadium, 'i') }
 		}
 
 		if (status) {

@@ -10,13 +10,14 @@ export default class TeamsSchema extends BaseSchema {
 
 		const modelDefinitions = this.getPropertiesDefinition()
 		this.schema.add(modelDefinitions)
+		this.schema.index({ name: -1, coach: -1 })
 	}
 
 	private getPropertiesDefinition(): SchemaDefinition {
 		return {
 			name: { type: String, required: true, unique: true },
 			coach: { type: String, required: true },
-			players: [{ name: String, number: Number, position: String }],
+			players: [{ name: String, position: String }],
 		}
 	}
 }

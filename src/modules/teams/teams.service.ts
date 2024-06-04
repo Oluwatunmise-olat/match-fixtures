@@ -14,6 +14,8 @@ export class TeamsService {
 
 	public async createTeam(payload: CreateTeamDto): Promise<ServiceLayerResponse> {
 		try {
+			payload.name = payload.name.toLowerCase()
+
 			const teamNameIsTaken = await this.teamRepository.teamNameTaken(payload.name)
 			if (teamNameIsTaken) return { status: false, message: 'Team name is taken' }
 
@@ -21,12 +23,16 @@ export class TeamsService {
 
 			return { status: true, message: 'Team created successfully' }
 		} catch (error) {
+			console.log(error)
 			return { status: false, message: 'An error occurred creating team' }
 		}
 	}
 
 	public async deleteTeam(teamId: string): Promise<ServiceLayerResponse> {
 		try {
+			const team = await this.teamRepository.findOne({ _id: teamId, deleted_at: null })
+			if (!team) return { status: false, message: 'Team not found', errorStatusCode: StatusCodes.NOT_FOUND }
+
 			await this.teamRepository.deleteById(teamId)
 
 			return { status: true, message: 'Team deleted successfully' }
@@ -37,7 +43,9 @@ export class TeamsService {
 
 	public async getTeamDetails(teamId: string): Promise<ServiceLayerResponse> {
 		try {
-			const team = await this.teamRepository.findOne({ id: teamId, deleted_at: null })
+			console.log(teamId)
+
+			const team = await this.teamRepository.findOne({ _id: teamId, deleted_at: null })
 			if (!team) return { status: false, message: 'Team not found', errorStatusCode: StatusCodes.NOT_FOUND }
 
 			return { status: true, message: 'Team details fetched successfully', data: team }
@@ -48,17 +56,21 @@ export class TeamsService {
 
 	public async updateTeamDetails(teamId: string, payload: Partial<CreateTeamDto>): Promise<ServiceLayerResponse> {
 		try {
-			const team = await this.teamRepository.findOne({ id: teamId, deleted_at: null })
+			const team = await this.teamRepository.findOne({ _id: teamId, deleted_at: null })
 			if (!team) return { status: false, message: 'Team not found', errorStatusCode: StatusCodes.NOT_FOUND }
 
 			if (payload.name) {
+				payload.name = payload.name.toLowerCase()
+
 				const teamNameIsTaken = await this.teamRepository.teamNameTaken(payload.name)
-				if (teamNameIsTaken) return { status: false, message: 'Team name is taken' }
+
+				if (teamNameIsTaken && teamNameIsTaken._id.toString() !== teamId)
+					return { status: false, message: 'Team name is taken' }
 			}
 
 			await this.teamRepository.updateById(teamId, payload)
 
-			return { status: true, message: 'Team details fetched successfully', data: team }
+			return { status: true, message: 'Team details fetched successfully' }
 		} catch (error) {
 			return { status: false, message: 'An error occurred fetching team details' }
 		}

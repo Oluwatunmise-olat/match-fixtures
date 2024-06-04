@@ -11,9 +11,7 @@ export class TeamsRepository extends BaseRepository<any> {
 	}
 
 	public async teamNameTaken(name: string) {
-		const result = await this.model.findOne({ name, deleted_at: null })
-
-		return !!result
+		return await this.model.findOne({ name, deleted_at: null })
 	}
 
 	public async coachExistsWithName(name: string) {
@@ -23,14 +21,14 @@ export class TeamsRepository extends BaseRepository<any> {
 	}
 
 	public async getAllTeams({ name, coach, limit = 10, page = 1 }: ObjectLiteral) {
-		const queryPayload = {}
+		const queryPayload = { deleted_at: null }
 
 		if (name) {
-			queryPayload['name'] = name
+			queryPayload['name'] = { $regex: new RegExp(name, 'i') }
 		}
 
 		if (coach) {
-			queryPayload['coach'] = coach
+			queryPayload['coach'] = { $regex: new RegExp(coach, 'i') }
 		}
 
 		const skipPage = (page - 1) * limit

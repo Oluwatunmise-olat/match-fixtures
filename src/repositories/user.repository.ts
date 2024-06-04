@@ -23,9 +23,9 @@ export class UserRepository extends BaseRepository<any> {
 	}
 
 	public async getAllUsers({ username, limit = 10, page = 1 }: ObjectLiteral) {
-		const queryPayload = {}
+		const queryPayload = { deleted_at: null }
 
-		if (username) queryPayload['username'] = username
+		if (username) queryPayload['username'] = { $regex: new RegExp(username, 'i') }
 
 		const skipPage = (page - 1) * limit
 		return await this.model.find(queryPayload).skip(skipPage).limit(limit).sort({ created_at: -1 })

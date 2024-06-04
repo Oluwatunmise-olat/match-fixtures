@@ -12,14 +12,14 @@ export class FixturesController {
 
 	// Query filter by status and teams and stadium
 	getAllFixtures = async (request: Request, response: Response) => {
-		const qs = request.params as FixtureQs
+		const qs = request.query as FixtureQs
 		const data = await this.fixtureService.getAllFixtures(qs)
 
 		return baseResponse({ response, data })
 	}
 
 	getFixture = async (request: Request, response: Response) => {
-		const { fixtureId } = request.query
+		const { fixtureId } = request.params
 		const data = await this.fixtureService.getFixtureDetails(fixtureId as string)
 
 		return baseResponse({ response, data })
@@ -33,21 +33,21 @@ export class FixturesController {
 	}
 
 	generateFixtureLink = async (request: Request, response: Response) => {
-		const { fixtureId } = request.query
+		const { fixtureId } = request.params
 		const data = await this.fixtureService.generateFixtureLink(fixtureId as string)
 
 		return baseResponse({ response, data })
 	}
 
 	deleteFixture = async (request: Request, response: Response) => {
-		const { fixtureId } = request.query
+		const { fixtureId } = request.params
 		const data = await this.fixtureService.deleteFixture(fixtureId as string)
 
 		return baseResponse({ response, data })
 	}
 
 	updateFixture = async (request: Request, response: Response) => {
-		const { fixtureId } = request.query
+		const { fixtureId } = request.params
 		const payload = request.body as CreateFixtureDto
 		const data = await this.fixtureService.updateFixture(fixtureId as string, payload)
 

@@ -11,21 +11,21 @@ export class TeamsController {
 	constructor(private readonly teamsService: TeamsService) {}
 
 	getAllTeams = async (request: Request, response: Response) => {
-		const qs = request.params as TeamQs
+		const qs = request.query as TeamQs
 		const data = await this.teamsService.getAllTeams(qs)
 
 		return baseResponse({ response, data })
 	}
 
 	getTeamDetails = async (request: Request, response: Response) => {
-		const { teamId } = request.query
+		const { teamId } = request.params
 		const data = await this.teamsService.getTeamDetails(teamId as string)
 
 		return baseResponse({ response, data })
 	}
 
 	updateTeamDetails = async (request: Request, response: Response) => {
-		const { teamId } = request.query
+		const { teamId } = request.params
 		const payload = request.body as CreateTeamDto
 		const data = await this.teamsService.updateTeamDetails(teamId as string, payload)
 
@@ -33,7 +33,7 @@ export class TeamsController {
 	}
 
 	deleteTeam = async (request: Request, response: Response) => {
-		const { teamId } = request.query
+		const { teamId } = request.params
 		const data = await this.teamsService.deleteTeam(teamId as string)
 
 		return baseResponse({ response, data })
@@ -47,4 +47,4 @@ export class TeamsController {
 	}
 }
 
-// - TODO :: PostMan Docs, Write Tests, Caching, Guard routes
+// - TODO :: Write Tests, Caching, Deployment

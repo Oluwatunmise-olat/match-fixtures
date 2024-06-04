@@ -11,7 +11,7 @@ export class SearchController {
 	constructor(private readonly searchService: SearchService) {}
 
 	search = async (request: Request, response: Response) => {
-		const qs = request.params as SearchQs
+		const qs = request.query as SearchQs
 		const { module } = request.query
 
 		const data = await this.searchService.search(qs, module as ModelNames)
