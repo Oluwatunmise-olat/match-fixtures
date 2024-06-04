@@ -1,0 +1,3 @@
+describe('Teams Module', () => {
+	test('', () => {})
+})
