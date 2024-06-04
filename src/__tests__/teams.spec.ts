@@ -4,6 +4,7 @@ import supertest from 'supertest'
 import { TeamsRepository } from '../../src/repositories'
 import Application from '../app'
 import { createAdminUserAndGenerateJwtToken, createNormalUserAndGenerateJwtToken, teamPayloadFactory } from './helpers'
+import { INVALID_OBJECT_ID } from '../../jest.setup'
 
 const teamsRepository = container.resolve(TeamsRepository)
 
@@ -68,11 +69,10 @@ describe('Teams Module', () => {
 
 	describe('Update Team', () => {
 		test('Given an invalid team id, should return an error response', async () => {
-			const randomId = '665f1dd1f7ef2657a597d5a7'
 			const { auth_token } = await createAdminUserAndGenerateJwtToken('teams.admin.user+2@example.com')
 			const payload = teamPayloadFactory()
 			const response = await request
-				.put(`/v1/teams/${randomId}`)
+				.put(`/v1/teams/${INVALID_OBJECT_ID}`)
 				.send(payload)
 				.set({
 					'Authorization': `Bearer ${auth_token}`,
@@ -107,11 +107,9 @@ describe('Teams Module', () => {
 
 	describe('Delete Team', () => {
 		test('Given an invalid team id, should return an error response', async () => {
-			const randomId = '665f1dd1f7ef2657a597d5a7'
-
 			const { auth_token } = await createAdminUserAndGenerateJwtToken('teams.admin.user+4@example.com')
 
-			const response = await request.delete(`/v1/teams/${randomId}`).set({
+			const response = await request.delete(`/v1/teams/${INVALID_OBJECT_ID}`).set({
 				'Authorization': `Bearer ${auth_token}`,
 				'Content-Type': 'application/json',
 			})

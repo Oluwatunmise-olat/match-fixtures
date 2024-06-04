@@ -1,13 +1,14 @@
 import faker from '@withshepherd/faker'
 import { container } from 'tsyringe'
 
-import { UserRepository } from '../../../src/repositories'
+import { UserRepository, TeamsRepository } from '../../../src/repositories'
 
 import { UserRoles } from '@app/shared/enums/models.enum'
 import { JwtPayloadContract } from '@app/shared/types/jwt.type'
 import { generateJwtToken } from '@app/shared/utils/jwt'
 
 const userRepository = container.resolve(UserRepository)
+const teamsRepository = container.resolve(TeamsRepository)
 
 export const createAdminUserAndGenerateJwtToken = async (mail: string) => {
 	const userCreationPayload = {
@@ -58,6 +59,18 @@ export const playersPayloadFactory = (count = 1) => {
 		}
 
 		data.push(player)
+	}
+
+	return data
+}
+
+export const createTeams = async (count = 2) => {
+	const data: Array<any> = []
+
+	for (let i = 0; i < count; i++) {
+		const team = teamPayloadFactory()
+		const createdTeam = await teamsRepository.create(team)
+		data.push(createdTeam)
 	}
 
 	return data
