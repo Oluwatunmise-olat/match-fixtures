@@ -34,4 +34,12 @@ export class TeamsRepository extends BaseRepository<any> {
 		const skipPage = (page - 1) * limit
 		return await this.model.find(queryPayload).skip(skipPage).limit(limit).sort({ created_at: -1 })
 	}
+
+	public async search({ limit = 10, page = 1, query }: ObjectLiteral) {
+		return await this.model
+			.find({ name: { $regex: new RegExp(query, 'i') }, deleted_at: null })
+			.skip((page - 1) * limit)
+			.limit(limit)
+			.sort({ created_at: -1 })
+	}
 }

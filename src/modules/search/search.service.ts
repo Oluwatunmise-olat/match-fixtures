@@ -29,6 +29,7 @@ export class SearchService {
 
 			return { status: true, message: 'Records fetched successfully', data }
 		} catch (error) {
+			console.error(error)
 			return { status: false, message: 'An error occurred fetching records' }
 		}
 	}

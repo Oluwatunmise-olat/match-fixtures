@@ -39,4 +39,15 @@ export class FixturesRepository extends BaseRepository<any> {
 		const skipPage = (page - 1) * limit
 		return await this.model.find(queryPayload).skip(skipPage).limit(limit).sort({ created_at: -1 })
 	}
+
+	public async search({ limit = 10, page = 1, query }: ObjectLiteral) {
+		return await this.model
+			.find({
+				$or: [{ stadium: { $regex: new RegExp(query, 'i') }, coach: { $regex: new RegExp(query, 'i') } }],
+				deleted_at: null,
+			})
+			.skip((page - 1) * limit)
+			.limit(limit)
+			.sort({ created_at: -1 })
+	}
 }

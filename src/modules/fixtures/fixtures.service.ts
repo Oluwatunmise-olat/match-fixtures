@@ -46,7 +46,7 @@ export class FixturesService {
 
 			const baseUrl = appConfig.app_base_url
 
-			const fixtureLink = `${baseUrl}/fixtures/{fixture_id}`
+			const fixtureLink = `${baseUrl}/fixtures/${fixture_id}`
 
 			return { status: true, message: 'Fixture Link Generated', data: { link: fixtureLink } }
 		} catch (error) {
