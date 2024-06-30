@@ -9,7 +9,7 @@ phases:
       - yarn install
   pre_build:
     commands:
-      - yarn run sample-test
+      - yarn run test
   build:
     commands:
       - echo Build Starting...
