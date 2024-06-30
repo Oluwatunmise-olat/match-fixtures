@@ -7,6 +7,9 @@ phases:
     commands:
       - npm install typescript yarn -g
       - yarn install
+  pre_build:
+    commands:
+      - yarn run sample-test
   build:
     commands:
       - echo Build Starting...
