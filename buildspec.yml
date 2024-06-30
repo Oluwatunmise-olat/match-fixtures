@@ -1,3 +1,6 @@
+# Read regarding code build privilege mode for docker daemon access
+# https://stackoverflow.com/questions/72278034/aws-codebuild-how-to-run-tests-that-require-starting-docker
+
 version: 0.2
 
 phases:
