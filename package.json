@@ -11,7 +11,6 @@
 		"test": "yarn run pre-test && jest --forceExit --no-cache --runInBand ; yarn run post-test",
 		"pre-test": "/bin/bash ./scripts/pre-test-script.sh",
 		"post-test": "/bin/bash ./scripts/post-test-script.sh",
-		"sample-test": "/bin/bash ./scripts/sample.sh",
 		"manual:deploy": "/bin/bash ./scripts/deploy.sh"
 	},
 	"dependencies": {
