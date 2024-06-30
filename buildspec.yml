@@ -5,17 +5,16 @@ phases:
     runtime-versions:
       nodejs: 18
     commands:
-      - echo Installing dependencies...
-      - npm install
+      - npm install typescript yarn -g
   build:
     commands:
-      - echo Compiling TypeScript code...
+      - echo Build Starting...
       - yarn run build
   post_build:
     commands:
-      - echo Build completed successfully.
+      - echo Build Finished.
 
 artifacts:
   files:
-    - '**/*'
-  discard-paths: yes
+    - 'dist/**/*'
+  discard-paths: no
