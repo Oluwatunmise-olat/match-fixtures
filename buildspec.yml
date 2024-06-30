@@ -6,6 +6,7 @@ phases:
       nodejs: 18
     commands:
       - npm install typescript yarn -g
+      - yarn install
   build:
     commands:
       - echo Build Starting...
