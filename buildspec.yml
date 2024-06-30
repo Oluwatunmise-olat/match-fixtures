@@ -18,11 +18,10 @@ phases:
       - yarn run build
   post_build:
     commands:
+      - zip -r match-fixtures.zip dist package.json yarn.lock appspec.yml
       - echo Build Finished.
 
 artifacts:
   files:
-    - 'dist/**/*'
-    - package.json
-    - yarn.lock
+    - match-fixtures.zip
   discard-paths: no
