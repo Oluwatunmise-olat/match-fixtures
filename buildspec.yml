@@ -18,7 +18,7 @@ phases:
       - yarn run build
   post_build:
     commands:
-      - zip -r match-fixtures.zip dist package.json yarn.lock appspec.yml
+      - zip -r match-fixtures.zip dist package.json yarn.lock appspec.yml scripts
       - echo Build Finished.
 
 artifacts:
