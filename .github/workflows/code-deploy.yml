@@ -4,7 +4,7 @@ name: Trigger Blue Green Deployment
 on:
   push:
     branches:
-      - code-pipelinep
+      - code-pipeline
 
 jobs:
   update-launch-template:
