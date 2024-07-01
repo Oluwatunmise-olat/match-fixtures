@@ -9,9 +9,8 @@ hooks:
     #   timeout: 300
     #   runas: root
   AfterInstall:
-    # - location: scripts/change_permissions.sh
-    #   timeout: 300
-    #   runas: root
+    - location: scripts/code-deploy.sh
+      runas: root
   ApplicationStart:
     # - location: scripts/start_server.sh
     # - location: scripts/create_test_db.sh
