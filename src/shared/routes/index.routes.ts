@@ -12,7 +12,7 @@ import { Server } from '../types/http.type'
 const { version } = appConfig
 
 export default (server: Server) => {
-	server.get('/health', (_, res) => res.status(StatusCodes.OK).send('okay'))
+	server.get('/health', (_, res) => res.status(StatusCodes.OK).send('Hello Habibi 👨🏾‍🦯'))
 
 	authRoutes(server, `/${version}/auth`)
 	fixturesRoutes(server, `/${version}/fixtures`)
